@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>NULL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --white:#f2f4f8;
+    --blood:#8d1414;
+    --amber:#d8a13a;
+    --dim:#8b9099;
+    --font-title:'Orbitron', 'Impact', system-ui, sans-serif;
+    --font-body:'Rajdhani', 'Segoe UI', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; background:#000; overflow:hidden; font-family:var(--font-body); color:var(--white);}
+  canvas{display:block;}
+  #app{position:fixed; inset:0;}
+  .hidden{display:none !important;}
+  .screen{position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:40;}
+
+  /* ---------- BOOT ---------- */
+  #boot{background:#000; z-index:200;}
+  #boot .bar{width:260px; height:2px; background:#1a1a1a; margin-top:18px; overflow:hidden;}
+  #boot .bar i{display:block; height:100%; width:0%; background:var(--blood); transition:width .3s;}
+  #boot .tag{font-size:12px; letter-spacing:.42em; color:#4a4d55; margin-top:14px; text-transform:uppercase;}
+
+  /* ---------- TITLE ---------- */
+  #title{
+    background:radial-gradient(circle at 50% 40%, #141414 0%, #050505 55%, #000 100%);
+    z-index:120;
+  }
+  #title::before{
+    content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.028) 0px, rgba(255,255,255,.028) 1px, transparent 1px, transparent 3px);
+    pointer-events:none;
+  }
+  .title-mark{
+    font-family:var(--font-title); font-weight:900; font-size:clamp(64px,15vw,190px);
+    letter-spacing:.16em; display:flex; line-height:1; user-select:none;
+    color:#fff; text-shadow:0 0 18px rgba(255,255,255,.35), 0 0 60px rgba(255,255,255,.12);
+    padding-left:.16em;
+  }
+  .title-mark span{display:inline-block; animation:vibe .11s infinite linear; }
+  @keyframes vibe{
+    0%{transform:translate(0,0) skewX(0deg); opacity:.96;}
+    25%{transform:translate(-1.5px,1px) skewX(-1.2deg); opacity:1;}
+    50%{transform:translate(1.5px,-1px) skewX(.8deg); opacity:.9;}
+    75%{transform:translate(-1px,-1.5px) skewX(-.5deg); opacity:1;}
+    100%{transform:translate(1px,1.5px) skewX(1.1deg); opacity:.95;}
+  }
+  .credit{
+    margin-top:22px; font-size:clamp(11px,1.5vw,15px); letter-spacing:.34em; color:#9aa0aa;
+    text-transform:uppercase; font-weight:600;
+  }
+  .credit b{color:#efefef; font-weight:700;}
+  .title-rule{width:min(520px,70vw); height:1px; background:linear-gradient(90deg,transparent,#5a5a5a,transparent); margin:26px 0 30px;}
+  .btn{
+    font-family:var(--font-title); font-weight:700; letter-spacing:.28em; text-transform:uppercase;
+    background:transparent; color:#e9e9e9; border:1px solid #4a4a4a; padding:16px 52px;
+    font-size:clamp(12px,1.5vw,16px); cursor:pointer; position:relative; overflow:hidden;
+    transition:all .18s ease; min-width:220px;
+  }
+  .btn:hover{color:#fff; border-color:var(--blood); background:rgba(141,20,20,.16); box-shadow:0 0 30px rgba(141,20,20,.35) inset; letter-spacing:.34em;}
+  .btn.small{padding:11px 26px; font-size:11px; min-width:150px; letter-spacing:.2em;}
+  .btn.ghost{border-color:#2c2c2c; color:#8b9099;}
+  .btn.ghost:hover{border-color:#666; color:#fff; background:rgba(255,255,255,.04); box-shadow:none;}
+  .title-foot{position:absolute; bottom:26px; font-size:10.5px; letter-spacing:.3em; color:#3d4048; text-transform:uppercase; text-align:center;}
+
+  /* ---------- DIFFICULTY ---------- */
+  #difficulty{background:rgba(2,2,3,.93); z-index:130; backdrop-filter:blur(6px);}
+  .pane-title{font-family:var(--font-title); letter-spacing:.4em; font-size:clamp(14px,2vw,20px); margin-bottom:8px; color:#fff;}
+  .pane-sub{font-size:13px; letter-spacing:.22em; color:#767b84; text-transform:uppercase; margin-bottom:34px;}
+  .diff-grid{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; padding:0 20px;}
+  .diff-card{
+    width:176px; padding:22px 18px; border:1px solid #2e2e2e; background:rgba(255,255,255,.02);
+    cursor:pointer; transition:.16s; text-align:left;
+  }
+  .diff-card:hover{transform:translateY(-4px); border-color:#666; background:rgba(255,255,255,.05);}
+  .diff-card.sel{border-color:var(--blood); background:rgba(141,20,20,.14); box-shadow:0 0 26px rgba(141,20,20,.22);}
+  .diff-num{font-family:var(--font-title); font-size:26px; color:#3a3a3a; font-weight:900;}
+  .diff-card.sel .diff-num{color:var(--blood);}
+  .diff-name{font-family:var(--font-title); letter-spacing:.22em; font-size:14px; margin:6px 0 10px;}
+  .diff-desc{font-size:12.5px; line-height:1.5; color:#8b9099; letter-spacing:.04em;}
+  #diffGo{margin-top:36px;}
+
+  /* ---------- HUD ---------- */
+  /* truncated for length - full file needed */
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script type="importmap">
+</script>
+<script type="module" src="./js/game.js"></script>
+</body>
+</html>
