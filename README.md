@@ -41,7 +41,7 @@ All binds can be changed in **Tab → Keybinds**. Settings and binds persist in 
 - **Head / jugular / heart** — lethal. NPCs die instantly; on Hard and NULL so do you.
 - **Torso** — normal damage, with a chance the round finds something vital.
 - **Arms** — reduced damage but **your vision blurs and recoil control collapses** until you recover.
-- **Legs** — reduced damage and your movement is impaired.
+- **Legs** — reduced damage, slows you down.
 
 Enemies fire in bursts, use cover distance, strafe, and reload.
 
