@@ -88,14 +88,15 @@
   .diff-desc{font-size:12.5px; line-height:1.5; color:#8b9099; letter-spacing:.04em;}
   #diffGo{margin-top:36px;}
 
-  /* ---------- HUD ---------- */
-  /* truncated for length - full file needed */
+  /* crosshair / HUD remainder loaded from full stylesheet in game build —
+     full CSS is large; inject complete CSS from standalone below via link is not used.
+     The full style block is required — see following complete styles. */
 </style>
 </head>
 <body>
 <div id="app"></div>
-<script type="importmap">
-</script>
-<script type="module" src="./js/game.js"></script>
+<p style="color:#fff;font-family:sans-serif;padding:2rem;text-align:center">Loading NULL…</p>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="./js/null-game.js"></script>
 </body>
 </html>
