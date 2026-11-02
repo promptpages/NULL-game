@@ -2,7 +2,15 @@
 
 A first-person 3D action campaign about a man raised from birth to be an assassin, whose father is murdered by an organisation called **Nook** when he is sixteen.
 
-Open **`index.html`** to play. Nothing to install — it runs in the browser with WebGL (Three.js is loaded from a CDN).
+**Play:** open **`NULL-fullscreen.html`** (standalone, everything in one file) or **`index.html`** for the modular build.
+
+---
+
+## Latest improvements (2026-11-02)
+
+- **Cutscenes** — smoother letterbox, vignette, tighter cinematic FOV, better caption/subtitle fades, improved scene lighting and rim lights.
+- **Enemy spawns** — bots and civilians are pushed out of crates, boxes, and solid building volume so they no longer appear inside geometry you cannot enter.
+- **Guns & aiming (CS-inspired)** — denser weapon meshes, dual-hand viewmodel on long guns, muzzle flash on the viewmodel, ADS pulls the gun to center with stronger FOV zoom, reduced ADS spread/recoil, and a dynamic crosshair that opens with movement/spread and tightens when aiming.
 
 ---
 
@@ -73,23 +81,9 @@ A full run of the campaign, played cleanly, is roughly **20–30 minutes** plus 
 
 ---
 
-## The crew
-
-You are **NULL** — tall, strong, military buzz cut, no name.
-
-- **JACKSON** — tall, broad, the wall between you and them. Always at your side.
-- **SOFIE** — tall, curvy, the best fighter in the room. Fights beside you and Jackson on almost every mission.
-- **WREN** — small, round, cheerful, obsessed with explosives.
-- **KESTREL** — lean, wiry, overwatch with a marksman rifle.
-- **DICE** — wiry, glasses, signals and locks, talks too much.
-- **BISHOP** — heavy-set, bald, beard, heavy weapons.
-
-Behind them: **Harrow**, the man who runs Nook, and the man who stood in your father's yard eight years ago.
-
----
-
 ## Notes
 
 - Cutscenes are cinematic camera sequences with subtitles (no voice acting).
 - Gore is present but restrained — blood particles, impact decals, no dismemberment. It can be turned off in settings.
 - Audio is procedurally generated (gunfire, impacts, ambience) — no audio files needed.
+- Standalone build: **`NULL-fullscreen.html`** (open in any modern browser with WebGL).
