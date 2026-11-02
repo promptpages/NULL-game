@@ -1,101 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <title>NULL</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --white:#f2f4f8;
-    --blood:#8d1414;
-    --amber:#d8a13a;
-    --dim:#8b9099;
-    --font-title:'Orbitron', 'Impact', system-ui, sans-serif;
-    --font-body:'Rajdhani', 'Segoe UI', system-ui, sans-serif;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html,body{height:100%; background:#000; overflow:hidden; font-family:var(--font-body); color:var(--white);}
-  canvas{display:block;}
-  #app{position:fixed; inset:0;}
-  .hidden{display:none !important;}
-  .screen{position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:40;}
-
-  /* ---------- BOOT ---------- */
-  #boot{background:#000; z-index:200;}
-  #boot .bar{width:260px; height:2px; background:#1a1a1a; margin-top:18px; overflow:hidden;}
-  #boot .bar i{display:block; height:100%; width:0%; background:var(--blood); transition:width .3s;}
-  #boot .tag{font-size:12px; letter-spacing:.42em; color:#4a4d55; margin-top:14px; text-transform:uppercase;}
-
-  /* ---------- TITLE ---------- */
-  #title{
-    background:radial-gradient(circle at 50% 40%, #141414 0%, #050505 55%, #000 100%);
-    z-index:120;
-  }
-  #title::before{
-    content:""; position:absolute; inset:0;
-    background:repeating-linear-gradient(0deg, rgba(255,255,255,.028) 0px, rgba(255,255,255,.028) 1px, transparent 1px, transparent 3px);
-    pointer-events:none;
-  }
-  .title-mark{
-    font-family:var(--font-title); font-weight:900; font-size:clamp(64px,15vw,190px);
-    letter-spacing:.16em; display:flex; line-height:1; user-select:none;
-    color:#fff; text-shadow:0 0 18px rgba(255,255,255,.35), 0 0 60px rgba(255,255,255,.12);
-    padding-left:.16em;
-  }
-  .title-mark span{display:inline-block; animation:vibe .11s infinite linear; }
-  @keyframes vibe{
-    0%{transform:translate(0,0) skewX(0deg); opacity:.96;}
-    25%{transform:translate(-1.5px,1px) skewX(-1.2deg); opacity:1;}
-    50%{transform:translate(1.5px,-1px) skewX(.8deg); opacity:.9;}
-    75%{transform:translate(-1px,-1.5px) skewX(-.5deg); opacity:1;}
-    100%{transform:translate(1px,1.5px) skewX(1.1deg); opacity:.95;}
-  }
-  .credit{
-    margin-top:22px; font-size:clamp(11px,1.5vw,15px); letter-spacing:.34em; color:#9aa0aa;
-    text-transform:uppercase; font-weight:600;
-  }
-  .credit b{color:#efefef; font-weight:700;}
-  .title-rule{width:min(520px,70vw); height:1px; background:linear-gradient(90deg,transparent,#5a5a5a,transparent); margin:26px 0 30px;}
-  .btn{
-    font-family:var(--font-title); font-weight:700; letter-spacing:.28em; text-transform:uppercase;
-    background:transparent; color:#e9e9e9; border:1px solid #4a4a4a; padding:16px 52px;
-    font-size:clamp(12px,1.5vw,16px); cursor:pointer; position:relative; overflow:hidden;
-    transition:all .18s ease; min-width:220px;
-  }
-  .btn:hover{color:#fff; border-color:var(--blood); background:rgba(141,20,20,.16); box-shadow:0 0 30px rgba(141,20,20,.35) inset; letter-spacing:.34em;}
-  .btn.small{padding:11px 26px; font-size:11px; min-width:150px; letter-spacing:.2em;}
-  .btn.ghost{border-color:#2c2c2c; color:#8b9099;}
-  .btn.ghost:hover{border-color:#666; color:#fff; background:rgba(255,255,255,.04); box-shadow:none;}
-  .title-foot{position:absolute; bottom:26px; font-size:10.5px; letter-spacing:.3em; color:#3d4048; text-transform:uppercase; text-align:center;}
-
-  /* ---------- DIFFICULTY ---------- */
-  #difficulty{background:rgba(2,2,3,.93); z-index:130; backdrop-filter:blur(6px);}
-  .pane-title{font-family:var(--font-title); letter-spacing:.4em; font-size:clamp(14px,2vw,20px); margin-bottom:8px; color:#fff;}
-  .pane-sub{font-size:13px; letter-spacing:.22em; color:#767b84; text-transform:uppercase; margin-bottom:34px;}
-  .diff-grid{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; padding:0 20px;}
-  .diff-card{
-    width:176px; padding:22px 18px; border:1px solid #2e2e2e; background:rgba(255,255,255,.02);
-    cursor:pointer; transition:.16s; text-align:left;
-  }
-  .diff-card:hover{transform:translateY(-4px); border-color:#666; background:rgba(255,255,255,.05);}
-  .diff-card.sel{border-color:var(--blood); background:rgba(141,20,20,.14); box-shadow:0 0 26px rgba(141,20,20,.22);}
-  .diff-num{font-family:var(--font-title); font-size:26px; color:#3a3a3a; font-weight:900;}
-  .diff-card.sel .diff-num{color:var(--blood);}
-  .diff-name{font-family:var(--font-title); letter-spacing:.22em; font-size:14px; margin:6px 0 10px;}
-  .diff-desc{font-size:12.5px; line-height:1.5; color:#8b9099; letter-spacing:.04em;}
-  #diffGo{margin-top:36px;}
-
-  /* crosshair / HUD remainder loaded from full stylesheet in game build —
-     full CSS is large; inject complete CSS from standalone below via link is not used.
-     The full style block is required — see following complete styles. */
+:root{--white:#f2f4f8;--blood:#8d1414;--amber:#d8a13a;--dim:#8b9099;--font-title:'Orbitron',Impact,system-ui,sans-serif;--font-body:'Rajdhani','Segoe UI',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;overflow:hidden;font-family:var(--font-body);color:var(--white)}
+canvas{display:block}#app{position:fixed;inset:0}.hidden{display:none!important}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:40}
+#boot{background:#000;z-index:200}#boot .bar{width:260px;height:2px;background:#1a1a1a;margin-top:18px;overflow:hidden}
+#boot .bar i{display:block;height:100%;width:0%;background:var(--blood);transition:width .3s}
+#boot .tag{font-size:12px;letter-spacing:.42em;color:#4a4d55;margin-top:14px;text-transform:uppercase}
+#title{background:radial-gradient(circle at 50% 40%,#141414 0%,#050505 55%,#000 100%);z-index:120}
+.title-mark{font-family:var(--font-title);font-weight:900;font-size:clamp(64px,15vw,190px);letter-spacing:.16em;display:flex;line-height:1;color:#fff;text-shadow:0 0 18px rgba(255,255,255,.35);padding-left:.16em}
+.title-mark span{display:inline-block;animation:vibe .11s infinite linear}
+@keyframes vibe{0%{transform:translate(0,0)}25%{transform:translate(-1.5px,1px)}50%{transform:translate(1.5px,-1px)}75%{transform:translate(-1px,-1.5px)}100%{transform:translate(1px,1.5px)}}
+.credit{margin-top:22px;font-size:clamp(11px,1.5vw,15px);letter-spacing:.34em;color:#9aa0aa;text-transform:uppercase;font-weight:600}
+.credit b{color:#efefef}.title-rule{width:min(520px,70vw);height:1px;background:linear-gradient(90deg,transparent,#5a5a5a,transparent);margin:26px 0 30px}
+.btn{font-family:var(--font-title);font-weight:700;letter-spacing:.28em;text-transform:uppercase;background:transparent;color:#e9e9e9;border:1px solid #4a4a4a;padding:16px 52px;font-size:clamp(12px,1.5vw,16px);cursor:pointer;min-width:220px;transition:all .18s}
+.btn:hover{color:#fff;border-color:var(--blood);background:rgba(141,20,20,.16)}
+.btn.small{padding:11px 26px;font-size:11px;min-width:150px}.btn.ghost{border-color:#2c2c2c;color:#8b9099}
+.title-foot{position:absolute;bottom:26px;font-size:10.5px;letter-spacing:.3em;color:#3d4048;text-transform:uppercase}
+#difficulty{background:rgba(2,2,3,.93);z-index:130;backdrop-filter:blur(6px)}
+.pane-title{font-family:var(--font-title);letter-spacing:.4em;font-size:clamp(14px,2vw,20px);margin-bottom:8px}
+.pane-sub{font-size:13px;letter-spacing:.22em;color:#767b84;text-transform:uppercase;margin-bottom:34px}
+.diff-grid{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;padding:0 20px}
+.diff-card{width:176px;padding:22px 18px;border:1px solid #2e2e2e;background:rgba(255,255,255,.02);cursor:pointer;text-align:left}
+.diff-card:hover{transform:translateY(-4px);border-color:#666}.diff-card.sel{border-color:var(--blood);background:rgba(141,20,20,.14)}
+.diff-num{font-family:var(--font-title);font-size:26px;color:#3a3a3a;font-weight:900}.diff-card.sel .diff-num{color:var(--blood)}
+.diff-name{font-family:var(--font-title);letter-spacing:.22em;font-size:14px;margin:6px 0 10px}
+.diff-desc{font-size:12.5px;line-height:1.5;color:#8b9099}#diffGo{margin-top:36px}
+#hud{position:fixed;inset:0;pointer-events:none;z-index:20}
+#crosshair{position:absolute;left:50%;top:50%;width:28px;height:28px;transform:translate(-50%,-50%)}
+#crosshair i{position:absolute;background:rgba(255,255,255,.88);box-shadow:0 0 2px #000}
+#crosshair i:nth-child(1){left:50%;top:0;width:1.5px;height:7px;margin-left:-.75px}
+#crosshair i:nth-child(2){left:50%;bottom:0;width:1.5px;height:7px;margin-left:-.75px}
+#crosshair i:nth-child(3){top:50%;left:0;width:7px;height:1.5px;margin-top:-.75px}
+#crosshair i:nth-child(4){top:50%;right:0;width:7px;height:1.5px;margin-top:-.75px}
+#objective{position:absolute;top:28px;left:28px;max-width:360px}
+#objTag{font-size:10px;letter-spacing:.4em;color:#8b9099}#objText{font-size:16px;letter-spacing:.08em;margin-top:4px}
+#objCount{font-size:12px;color:#8b9099;margin-top:4px}
+#cashLine,#repLine{position:absolute;top:28px;right:28px;text-align:right;font-size:13px;letter-spacing:.2em}
+#repLine{top:52px}.hud-corner{position:absolute;bottom:28px;left:28px;width:220px}
+.statrow{margin-bottom:10px}.stat-label{font-size:10px;letter-spacing:.28em;color:#8b9099;margin-bottom:4px;text-transform:uppercase}
+.barbg{height:5px;background:rgba(255,255,255,.09);overflow:hidden;border-left:2px solid rgba(255,255,255,.25)}
+.barfill{height:100%;width:100%;background:linear-gradient(90deg,#8d1414,#c44)}.hud-right{position:absolute;bottom:28px;right:28px;text-align:right}
+#ammoNum{font-family:var(--font-title);font-size:28px}#ammoNum small{font-size:14px;color:#8b9099}
+#weaponName{font-size:11px;letter-spacing:.3em;color:#9aa0aa;text-transform:uppercase;margin-top:6px}
+#promptBox{position:absolute;bottom:18%;left:50%;transform:translateX(-50%);font-size:14px;letter-spacing:.12em}
+#promptBox .k{display:inline-block;border:1px solid #ccc;padding:2px 8px;font-family:var(--font-title);font-size:12px;margin-right:8px}
+#alertBox{position:absolute;top:18%;left:50%;transform:translateX(-50%);font-size:13px;letter-spacing:.3em;color:#c44;text-transform:uppercase}
+#banner{position:absolute;top:22%;left:50%;transform:translateX(-50%);text-align:center;opacity:0;transition:opacity .4s}
+#bannerTitle{font-family:var(--font-title);font-size:22px;letter-spacing:.3em}#bannerSub{font-size:12px;letter-spacing:.25em;color:#8b9099;margin-top:8px}
+#cutscene{position:fixed;inset:0;z-index:90;pointer-events:none}
+.letter{position:absolute;left:0;right:0;height:12.5vh;background:#000;transition:transform .95s}
+#letterTop{top:0;transform:translateY(-105%)}#letterBot{bottom:0;transform:translateY(105%)}
+#cutscene.on .letter{transform:translateY(0)}
+#cutSub{position:absolute;left:50%;bottom:16.5vh;transform:translateX(-50%);width:min(920px,88vw);text-align:center;font-size:clamp(17px,1.85vw,24px);opacity:0;transition:opacity .55s}
+#cutSub.on{opacity:1}#cutSub .who{display:block;font-family:var(--font-title);font-size:.55em;letter-spacing:.36em;color:#d8a13a;margin-bottom:10px}
+#cutCaption{position:absolute;left:50%;top:15.5vh;transform:translateX(-50%);font-family:var(--font-title);font-size:11px;letter-spacing:.55em;color:#c8ced6;text-transform:uppercase;opacity:0}
+#cutCaption.on{opacity:1}#skipHint{position:absolute;right:28px;bottom:calc(12.5vh + 14px);font-size:10px;letter-spacing:.32em;color:#6a7078}
+#pause{background:rgba(3,3,4,.9);z-index:110;backdrop-filter:blur(9px)}
+.pause-wrap{display:flex;width:min(940px,92vw);height:min(600px,84vh);border:1px solid #232323;background:rgba(8,8,9,.85)}
+.pause-side{width:230px;border-right:1px solid #202020;padding:34px 0;display:flex;flex-direction:column}
+.pause-brand{font-family:var(--font-title);font-weight:900;letter-spacing:.3em;font-size:20px;padding:0 30px 26px}
+.navbtn{background:none;border:none;color:#8b9099;text-align:left;padding:13px 30px;cursor:pointer;font-size:13px;letter-spacing:.22em;text-transform:uppercase;border-left:2px solid transparent}
+.navbtn:hover{color:#fff}.navbtn.on{color:#fff;border-left-color:var(--blood);background:rgba(141,20,20,.12)}
+.pause-main{flex:1;padding:36px 40px;overflow-y:auto}#death,#debrief{background:rgba(4,5,6,.94);z-index:116}
+#death h1,#debrief h2{font-family:var(--font-title);letter-spacing:.3em;margin-bottom:16px}
+#clickToPlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:25;cursor:pointer;letter-spacing:.34em;font-family:var(--font-title);font-size:13px;text-transform:uppercase}
+#blurLayer,#lowhp,#damageVig,#healVig,#hitmark{position:absolute;inset:0;pointer-events:none}
+#hitmark{opacity:0}#subtitle{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);text-align:center}
 </style>
 </head>
 <body>
 <div id="app"></div>
-<p style="color:#fff;font-family:sans-serif;padding:2rem;text-align:center">Loading NULL…</p>
+<div id="boot" class="screen">
+  <div style="font-family:var(--font-title);letter-spacing:.44em;font-size:12px;color:#6b7078;">XPCHUNGIS44</div>
+  <div class="bar"><i id="bootBar"></i></div>
+  <div class="tag" id="bootTag">INITIALIZING</div>
+</div>
+<div id="title" class="screen hidden">
+  <div class="title-mark" id="titleMark"></div>
+  <div class="credit">created by <b>XPchungis44</b></div>
+  <div class="title-rule"></div>
+  <button class="btn" id="btnPlay">Play now</button>
+  <div style="margin-top:20px;"><button class="btn ghost small" id="btnControls">Controls</button></div>
+  <div class="title-foot">A 3D first-person revenge campaign</div>
+</div>
+<div id="difficulty" class="screen hidden">
+  <div class="pane-title">SELECT THREAT LEVEL</div>
+  <div class="pane-sub">The higher the level, the less the world forgives you</div>
+  <div class="diff-grid" id="diffGrid"></div>
+  <button class="btn" id="diffGo">Begin campaign</button>
+</div>
+<div id="hud" class="hidden">
+  <div id="blurLayer"></div><div id="lowhp"></div><div id="damageVig"></div><div id="healVig"></div>
+  <div id="crosshair"><i></i><i></i><i></i><i></i></div>
+  <div id="hitmark"><i></i><i></i><i></i><i></i></div>
+  <div id="objective"><div id="objTag">OBJECTIVE</div><div id="objText">—</div><div id="objCount"></div></div>
+  <div id="cashLine"><span id="cashNum">$0</span></div>
+  <div id="repLine">REPUTATION <b id="repNum">50</b></div>
+  <div class="hud-corner">
+    <div class="statrow" id="staminaWrap"><div class="stat-label">Stamina</div><div class="barbg"><div class="barfill" id="stFill"></div></div></div>
+    <div class="statrow"><div class="stat-label">Vitals</div><div class="barbg"><div class="barfill" id="hpFill"></div></div></div>
+  </div>
+  <div class="hud-right"><div id="ammoNum">0<small>/0</small></div><div id="weaponName">UNARMED</div></div>
+  <div id="promptBox"><span class="k" id="promptKey">E</span><span class="t" id="promptText"></span></div>
+  <div id="alertBox"></div>
+  <div id="banner"><div id="bannerTitle"></div><div id="bannerSub"></div></div>
+  <div id="subtitle"></div>
+</div>
+<div id="cutscene" class="hidden">
+  <div class="letter" id="letterTop"></div><div class="letter" id="letterBot"></div>
+  <div id="cutCaption"></div><div id="cutSub"></div><div id="skipHint">ESC — SKIP</div>
+</div>
+<div id="pause" class="screen hidden">
+  <div class="pause-wrap">
+    <div class="pause-side">
+      <div class="pause-brand">NULL</div>
+      <button class="navbtn on" data-tab="resume">Resume</button>
+      <button class="navbtn" data-tab="checkpoint">Checkpoint / Mission</button>
+      <button class="navbtn" data-tab="settings">Settings</button>
+      <button class="navbtn" data-tab="keybinds">Keybinds</button>
+      <button class="navbtn" data-tab="intel">Intel</button>
+      <button class="navbtn" data-tab="quit">Quit to title</button>
+    </div>
+    <div class="pause-main" id="pauseMain"></div>
+  </div>
+</div>
+<div id="death" class="screen hidden">
+  <h1>YOU DIED</h1>
+  <p id="deathTip">They were better than you today.</p>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;">
+    <button class="btn" id="btnRespawn">From last checkpoint</button>
+    <button class="btn ghost small" id="btnRestartMis">Restart mission</button>
+  </div>
+</div>
+<div id="debrief" class="screen hidden">
+  <h2 id="dbTitle">MISSION COMPLETE</h2>
+  <div class="sub" id="dbSub">ASHFALL</div>
+  <div class="debrief-stats" id="dbStats"></div>
+  <button class="btn" id="dbNext">Continue</button>
+</div>
+<div id="clickToPlay" class="hidden">Click to take control</div>
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script src="./js/null-game.js"></script>
 </body>
